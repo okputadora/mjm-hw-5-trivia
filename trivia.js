@@ -1,27 +1,27 @@
   var trivia = [
     {
       question: 'Life, head, heart, and destiny are the four main topics what practice?',
-       possibleAnswers: ['astrology', 'eschatology', 'palm-reading', 'numerology'],
+       choices: ['astrology', 'eschatology', 'palm-reading', 'numerology'],
        answer: 'palm-reading'
      },
     {
       question: 'If you had one bill (i.e. paper money not coins) with each President on Mt. Rushmore, how much money would you have?',
-      possibleAnswers: ['$1', '$5','$6', '$7'],
+      choices: ['$1', '$5','$6', '$7'],
       answer: '$7'
     },
     {
       question: 'What is secreted by lachrymose glands?',
-      possibleAnswers: ['seratonin', 'tears', 'insulin', 'milk'],
+      choices: ['seratonin', 'tears', 'insulin', 'milk'],
       answer: 'tears'
     },
     {
       question: 'What would you find in a ossuary?',
-      possibleAnswers: ['bones', 'bears', 'bells', 'birds'],
+      choices: ['bones', 'bears', 'bells', 'birds'],
       answer: 'bones'
     },
     {
       question: 'In what country was basketball invented?',
-      possibleAnswers: ['Australia', 'USA', 'Canada', 'Sweden'],
+      choices: ['Australia', 'USA', 'Canada', 'Sweden'],
       answer: 'Canada'
     }
   ]
@@ -46,6 +46,11 @@
     startRound()
 
     function startRound(){
+      // clear the board
+      $(".scoreboard").empty()
+      $(".question").empty()
+      $(".choices").empty()
+
       // if we have questions left
       if (round <= 4){
         loadScoreBoard(10)
@@ -63,19 +68,24 @@
       var timer = setInterval(function(){
         // if countdown done
         time--
+        clock.html(time)
         if (time == 0){
           clearInterval(timer)
           // go to the next question
           round++
           startRound()
+          return
         }
-        clock.html(time)
       }, 1000)
     }
     function loadGame(){
       question.html(trivia[round].question)
-      console.log(question)
-      $(".game").html(question)
+      $(".question").html(question)
+      trivia[round].choices.forEach(function(choice){
+        var choice = $("<button>")
+          .addClass("btn btn-default choice")
+          .html(choice)
+        $(".choices").append(choice)
+      })
     }
-
   }

@@ -14,3 +14,14 @@
   opacity: 0;
   transition: .3s ease-out;
 }
+
+.clock{
+  border: 1px solid grey;
+  padding: 10px;
+  width: 40px;
+  margin: auto
+}
+
+.choice{
+  margin: 20px;
+}
