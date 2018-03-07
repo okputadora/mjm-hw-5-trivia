@@ -1,4 +1,4 @@
-*{border: 1px solid red;}
+/* *{border: 1px solid red;} */
 .scoreboard{
   margin-top: 200px;
   transition: .3s ease-out;
@@ -9,6 +9,7 @@
   width:
 } */
 .game{
+  border: 1px solid grey;
   margin-top: 200px;
   opacity: 0;
   transition: .3s ease-out;

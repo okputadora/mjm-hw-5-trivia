@@ -1,6 +1,6 @@
   var trivia = [
     {
-      question: 'life, head, heart, and destiny are the four main topics what practice?',
+      question: 'Life, head, heart, and destiny are the four main topics what practice?',
        possibleAnswers: ['astrology', 'eschatology', 'palm-reading', 'numerology'],
        answer: 'palm-reading'
      },
@@ -26,10 +26,10 @@
     }
   ]
 
-  var button = $("<button>")
-  button.addClass("btn btn-default")
+  var button = $("<button>").addClass("btn btn-default")
   var instruction = $("<h1>")
   var clock = $("<div>").addClass("clock")
+  var question = $("<h3>")
 
   $(document).ready(function(){
     $("#ready").on("click", startGame)
@@ -43,37 +43,39 @@
     $(".scoreboard").css("margin-top", "0px")
     $(".game").css("opacity", "1");
     // start the round
-    startRound(round, correctCount)
-  }
+    startRound()
 
-  function startRound(roundNum, correctNum){
-    // if we have questions left
-    if (roundNum <= 4){
-      loadScoreBoard(roundNum, 10)
-      loadGame(roundNum)
-      return
-    }
-    // display results
-  }
-
-  function loadScoreBoard(number, time){
-    instruction.html("Question " + (number + 1))
-    $(".scoreboard").html(instruction)
-    $(".scoreboard").append(clock)
-    // contdown
-    var timer = setInterval(function(){
-      // if countdown done
-      if (time == 0){
-        clearInterval(timer)
-        // go to the next question
+    function startRound(){
+      // if we have questions left
+      if (round <= 4){
+        loadScoreBoard(10)
+        loadGame()
+        return
       }
-      $(".clock").html(time)
-      time--
-    }, 1000)
+      // display results
+    }
+    function loadScoreBoard(time){
+      instruction.html("Question " + (round + 1))
+      $(".scoreboard").html(instruction)
+      clock.html(time)
+      $(".scoreboard").append(clock)
+      // contdown
+      var timer = setInterval(function(){
+        // if countdown done
+        time--
+        if (time == 0){
+          clearInterval(timer)
+          // go to the next question
+          round++
+          startRound()
+        }
+        clock.html(time)
+      }, 1000)
+    }
+    function loadGame(){
+      question.html(trivia[round].question)
+      console.log(question)
+      $(".game").html(question)
+    }
 
-  }
-
-  function loadGame(index){
-    question = trivia[index].question
-    console.log(question)
   }
