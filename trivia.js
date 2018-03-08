@@ -30,9 +30,12 @@
   var instruction = $("<h1>")
   var clock = $("<div>").addClass("clock")
   var question = $("<h3>")
+  // initializing our timer in the global scope so it can be
+  // cancelled from anywhere
+  var timer;
 
   $(document).ready(function(){
-    $("#ready").on("click", startGame)
+    $(document).on("click", "#ready", startGame)
   })
 
   function startGame(){
@@ -57,15 +60,14 @@
         loadGame()
         return
       }
-      // display results
+      displayAllResults()
     }
     function loadScoreBoard(time){
       instruction.html("Question " + (round + 1))
       $(".scoreboard").html(instruction)
       clock.html(time)
       $(".scoreboard").append(clock)
-      // contdown
-      var timer = setInterval(function(){
+      timer = setInterval(function(){
         // if countdown done
         time--
         clock.html(time)
@@ -73,13 +75,15 @@
           clearInterval(timer)
           // go to the next question
           round++
-          startRound()
+          instruction.html("you've run out of time")
+          displayResult()
           return
         }
       }, 1000)
     }
     function loadGame(){
       question.html(trivia[round].question)
+      console.log(trivia[round].question)
       $(".question").html(question)
       trivia[round].choices.forEach(function(choice){
         var choice = $("<button>")
@@ -88,4 +92,44 @@
         $(".choices").append(choice)
       })
     }
+
+    function displayResult(){
+      $(".scoreboard").html(instruction)
+      if (round == trivia.length - 1){
+        $(".question").html("<h3>That was the last question</h3>")
+      }
+      else{$(".question").html("<h3>Here comes the next question...</h3>")}
+      $(".choices").empty()
+      clearInterval(timer)
+      round++
+      setTimeout(function(){
+        startRound()
+      }, 3000)
+    }
+
+    function displayAllResults(){
+
+      $(".question").empty()
+      var incorrectCount = trivia.length - correctCount
+      // handle a little grammar
+      var ans = 'answers'
+      if (correctCount == 1){
+        ans = 'answer'
+      }
+      $(".question").append("<h3>You got "+correctCount+" "+ans+" right</h3></br>")
+      $(".question").append("<h3>and "+incorrectCount+" wrong.</h3>")
+      instruction.html("Play again?")
+      $(".scoreboard").html(instruction)
+      $(".scoreboard").append("<button id='ready'>Yes!</button>")
+    }
+
+    $(".choices").on("click", ".choice", function(){
+      var guess = this.innerHTML
+      if (guess == trivia[round].answer){
+        correctCount++
+        instruction.html("Correct!")
+      }
+      else{instruction.html("Incorrect")}
+      displayResult()
+    })
   }
